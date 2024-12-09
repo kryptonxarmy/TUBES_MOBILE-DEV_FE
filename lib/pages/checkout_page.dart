@@ -57,6 +57,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
+        backgroundColor: Colors.teal,
       ),
       body: Column(
         children: [
@@ -85,9 +86,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: checkoutList.isEmpty ? null : checkoutAllProducts,
-            child: const Text('Checkout All'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton.icon(
+              onPressed: checkoutList.isEmpty ? null : checkoutAllProducts,
+              icon: const Icon(Icons.shopping_cart_checkout),
+              label: const Text('Checkout All'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
+            ),
           ),
         ],
       ),

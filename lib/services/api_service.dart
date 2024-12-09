@@ -20,7 +20,7 @@ Future<void> addProduct(String name, double price, int stock) async {
     body: json.encode({'name': name, 'price': price, 'stock': stock}),
   );
 
-  if (response.statusCode != 200) {
+  if (response.statusCode != 201) {
     throw Exception('Failed to add product');
   }
 }
@@ -32,7 +32,7 @@ Future<void> reduceStock(String productId, int newStock) async {
     body: json.encode({'stock': newStock}),
   );
 
-  if (response.statusCode != 200) {
+  if (response.statusCode != 201) {
     throw Exception('Failed to reduce stock');
   }
 }
