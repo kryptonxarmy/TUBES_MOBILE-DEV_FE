@@ -13,9 +13,11 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isOutOfStock = product['stock'] == 0;
+
     return GlassmorphicContainer(
       width: double.infinity,
-      height: 120,
+      height: 150,
       borderRadius: 20,
       blur: 20,
       alignment: Alignment.bottomCenter,
@@ -25,7 +27,8 @@ class ProductCard extends StatelessWidget {
         end: Alignment.bottomRight,
         colors: [
           Colors.white.withOpacity(0.1),
-          Colors.white.withOpacity(0.05),
+          Colors.blue.shade200.withOpacity(0.1),
+          Colors.pink.shade100.withOpacity(0.1),
         ],
       ),
       borderGradient: LinearGradient(
@@ -33,98 +36,100 @@ class ProductCard extends StatelessWidget {
         end: Alignment.bottomRight,
         colors: [
           Colors.white.withOpacity(0.5),
-          Colors.white.withOpacity(0.2),
+          Colors.blue.shade200.withOpacity(0.5),
+          Colors.pink.shade100.withOpacity(0.5),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            // Product Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    product['name'],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Stock: ${product['stock']}',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            // Price and Quantity Control
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '\$${product['price']}',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Row(
+      child: Opacity(
+        opacity: isOutOfStock ? 0.3 : 1.0,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              // Product Details
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildQuantityButton(
-                      icon: Icons.remove, 
-                      onPressed: () => onUpdateQuantity(product, -1)
-                    ),
-                    SizedBox(width: 8),
                     Text(
-                      '${product['quantity'] ?? 0}',
+                      product['name'],
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                        color: Colors.black87,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 8),
-                    _buildQuantityButton(
-                      icon: Icons.add, 
-                      onPressed: () => onUpdateQuantity(product, 1)
+                    SizedBox(height: 4),
+                    Text(
+                      'Stock: ${product['stock']}',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              ),
+
+              // Price and Quantity Control
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '\$${product['price']}',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _buildQuantityButton(
+                        icon: Icons.remove,
+                        onPressed: isOutOfStock
+                            ? null
+                            : () => onUpdateQuantity(product, -1),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '${product['quantity'] ?? 0}',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      _buildQuantityButton(
+                        icon: Icons.add,
+                        onPressed: isOutOfStock
+                            ? null
+                            : () => onUpdateQuantity(product, 1),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildQuantityButton({
-    required IconData icon, 
-    required VoidCallback onPressed
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(10),
+  Widget _buildQuantityButton(
+      {required IconData icon, required VoidCallback? onPressed}) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        shape: CircleBorder(),
+        padding: EdgeInsets.all(8),
+        backgroundColor: Colors.blue.shade200, // Button color
       ),
-      child: IconButton(
-        icon: Icon(icon, color: Colors.white),
-        iconSize: 20,
-        onPressed: onPressed,
-        padding: EdgeInsets.all(4),
-        constraints: BoxConstraints(),
-      ),
+      child: Icon(icon, color: Colors.white),
     );
   }
 }

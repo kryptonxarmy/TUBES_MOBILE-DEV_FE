@@ -33,11 +33,14 @@ class _AdminPageState extends State<AdminPage> {
     try {
       var productsData = await products;
       var selectedProducts = productsData
-          .where((product) => product['quantity'] != null && product['quantity'] > 0)
+          .where((product) =>
+              product['quantity'] != null && product['quantity'] > 0)
           .toList();
 
       for (var product in selectedProducts) {
-        await recordSale([{'productId': product['id'], 'quantity': product['quantity']}]);
+        await recordSale([
+          {'productId': product['id'], 'quantity': product['quantity']}
+        ]);
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,9 +65,9 @@ class _AdminPageState extends State<AdminPage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.deepPurple.shade800,
-              Colors.deepPurple.shade600,
-              Colors.deepPurple.shade400,
+              Colors.deepPurple.shade800.withOpacity(0.1),
+              Colors.blue.shade200.withOpacity(0.1),
+              Colors.pink.shade100.withOpacity(0.1),
             ],
           ),
         ),
@@ -80,7 +83,7 @@ class _AdminPageState extends State<AdminPage> {
                     Text(
                       'Product Management',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black87,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
@@ -100,14 +103,15 @@ class _AdminPageState extends State<AdminPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       );
                     }
                     if (snapshot.hasError) {
                       return Center(
                         child: Text(
-                          'Error: ${snapshot.error}', 
+                          'Error: ${snapshot.error}',
                           style: TextStyle(color: Colors.white),
                         ),
                       );
@@ -158,42 +162,39 @@ class _AdminPageState extends State<AdminPage> {
                       ],
                     ),
                     child: ElevatedButton.icon(
-                      onPressed: () async {
-                        var productsData = await products;
-                        var hasSelectedProducts = productsData.any(
-                          (product) => product['quantity'] != null && product['quantity'] > 0
-                        );
-                        if (hasSelectedProducts) {
-                          checkoutAllProducts();
-                        }
-                      },
-                      icon: Icon(Icons.shopping_cart_checkout, color: Colors.white, size: 28),
-                      label: Text(
-                        'Checkout All',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        surfaceTintColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        onPressed: () async {
+          var productsData = await products;
+          var hasSelectedProducts = productsData.any((product) =>
+              product['quantity'] != null && product['quantity'] > 0);
+          if (hasSelectedProducts) {
+            checkoutAllProducts();
+          }
+        },
+        icon: Icon(Icons.shopping_cart_checkout, color: Colors.white, size: 28),
+        label: Text(
+          'Checkout All',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue.shade200, // Button color
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 5,
+        ),
       ),
-    );
-  }
+    ),
+  ),
+),
+],
+),
+),
+),
+);
+}
 }
