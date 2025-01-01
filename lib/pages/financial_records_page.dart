@@ -44,7 +44,7 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Financial Records',
                       style: TextStyle(
                         color: Colors.white,
@@ -54,19 +54,19 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
                 ),
               ),
-              
+
               // Total Income Section
               FutureBuilder<double>(
                 future: totalIncome,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
@@ -75,14 +75,15 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                   if (snapshot.hasError) {
                     return Center(
                       child: Text(
-                        'Error: ${snapshot.error}', 
-                        style: TextStyle(color: Colors.white),
+                        'Error: ${snapshot.error}',
+                        style: const TextStyle(color: Colors.white),
                       ),
                     );
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8),
                     child: GlassmorphicContainer(
                       width: double.infinity,
                       height: 100,
@@ -109,8 +110,8 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                       child: Center(
                         child: Text(
                           'Total Income: \$${snapshot.data?.toStringAsFixed(2) ?? '0.00'}',
-                          style: TextStyle(
-                            fontSize: 24, 
+                          style: const TextStyle(
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -127,17 +128,18 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                   future: financialRecords,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       );
                     }
                     if (snapshot.hasError) {
                       return Center(
                         child: Text(
-                          'Error: ${snapshot.error}', 
-                          style: TextStyle(color: Colors.white),
+                          'Error: ${snapshot.error}',
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }
@@ -145,7 +147,7 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                     var recordsData = snapshot.data ?? [];
 
                     return ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: recordsData.length,
                       itemBuilder: (context, index) {
                         var record = recordsData[index];
@@ -177,35 +179,35 @@ class _FinancialRecordsPageState extends State<FinancialRecordsPage> {
                             child: ListTile(
                               leading: Container(
                                 decoration: BoxDecoration(
-                                  color: record['type'] == 'income' 
-                                    ? Colors.green.withOpacity(0.2) 
-                                    : Colors.red.withOpacity(0.2),
+                                  color: record['type'] == 'income'
+                                      ? Colors.green.withOpacity(0.2)
+                                      : Colors.red.withOpacity(0.2),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: Icon(
-                                  record['type'] == 'income' 
-                                    ? Icons.arrow_downward 
-                                    : Icons.arrow_upward,
-                                  color: record['type'] == 'income' 
-                                    ? Colors.green 
-                                    : Colors.red,
+                                  record['type'] == 'income'
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                  color: record['type'] == 'income'
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
                               ),
                               title: Text(
                                 record['description'],
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                               ),
                               subtitle: Text(
                                 'Amount: \$${record['amount']}',
-                                style: TextStyle(color: Colors.white70),
+                                style: const TextStyle(color: Colors.white70),
                               ),
                               trailing: Text(
                                 record['type'],
                                 style: TextStyle(
-                                  color: record['type'] == 'income' 
-                                    ? Colors.green 
-                                    : Colors.red,
+                                  color: record['type'] == 'income'
+                                      ? Colors.green
+                                      : Colors.red,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

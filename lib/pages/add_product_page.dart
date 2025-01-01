@@ -31,7 +31,7 @@ class _AddProductPageState extends State<AddProductPage> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Product added successfully'),
+            content: const Text('Product added successfully'),
             backgroundColor: Colors.green.withOpacity(0.7),
           ),
         );
@@ -70,7 +70,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Add New Product',
                       style: TextStyle(
                         color: Colors.white,
@@ -80,7 +80,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
@@ -131,7 +131,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               _buildGlassTextFormField(
                                 controller: priceController,
                                 labelText: 'Product Price',
@@ -144,7 +144,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               _buildGlassTextFormField(
                                 controller: stockController,
                                 labelText: 'Product Stock',
@@ -157,7 +157,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              SizedBox(height: 24),
+                              const SizedBox(height: 24),
                               _buildSubmitButton(),
                             ],
                           ),
@@ -194,13 +194,13 @@ class _AddProductPageState extends State<AddProductPage> {
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(color: Colors.white70),
+          labelStyle: const TextStyle(color: Colors.white70),
           prefixIcon: Icon(icon, color: Colors.white70),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           errorStyle: TextStyle(color: Colors.red.shade200),
         ),
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         keyboardType: keyboardType,
         validator: validator,
         cursorColor: Colors.white,
@@ -234,7 +234,7 @@ class _AddProductPageState extends State<AddProductPage> {
             Colors.white.withOpacity(0.2),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

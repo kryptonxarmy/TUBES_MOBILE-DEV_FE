@@ -32,12 +32,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Future<void> checkoutAllProducts() async {
     try {
       var selectedProducts = checkoutList
-          .where((product) => product['quantity'] != null && product['quantity'] > 0)
+          .where((product) =>
+              product['quantity'] != null && product['quantity'] > 0)
+          .map((product) =>
+              {'productId': product['id'], 'quantity': product['quantity']})
           .toList();
 
-      for (var product in selectedProducts) {
-        await recordSale([{'productId': product['id'], 'quantity': product['quantity']}]);
+      String description = 'Sale of multiple products: ';
+      for (var product in checkoutList) {
+        if (product['quantity'] != null && product['quantity'] > 0) {
+          description += '${product['name']} (x${product['quantity']}), ';
+        }
       }
+      // Remove trailing comma and space
+      description = description.substring(0, description.length - 2);
+
+      await recordSale(selectedProducts, description);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All products checked out successfully')),
@@ -94,7 +104,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               label: const Text('Checkout All'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 textStyle: const TextStyle(fontSize: 18),
               ),
             ),

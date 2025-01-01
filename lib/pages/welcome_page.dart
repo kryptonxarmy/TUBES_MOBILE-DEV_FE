@@ -16,7 +16,7 @@ class WelcomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Admin Page',
                 style: TextStyle(
                   fontSize: 32,
@@ -25,7 +25,7 @@ class WelcomePage extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               _buildGlassButton(
                 context,
                 icon: Icons.admin_panel_settings,
@@ -33,7 +33,7 @@ class WelcomePage extends StatelessWidget {
                 page: const AdminPage(),
                 color: Colors.blue.shade200,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildGlassButton(
                 context,
                 icon: Icons.add_shopping_cart,
@@ -41,7 +41,7 @@ class WelcomePage extends StatelessWidget {
                 page: const AddProductPage(),
                 color: Colors.pink.shade200,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildGlassButton(
                 context,
                 icon: Icons.receipt_long,
@@ -69,10 +69,10 @@ class WelcomePage extends StatelessWidget {
         );
       },
       icon: Icon(icon, color: Colors.white),
-      label: Text(label, style: TextStyle(color: Colors.white)),
+      label: Text(label, style: const TextStyle(color: Colors.white)),
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

@@ -37,17 +37,19 @@ Future<void> reduceStock(String productId, int newStock) async {
   }
 }
 
-Future<void> recordSale(List<Map<String, dynamic>> productsToCheckout) async {
-  for (var product in productsToCheckout) {
-    final response = await http.post(
-      Uri.parse('https://mobile-dev-backend-f97728e716db.herokuapp.com/api/sales'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(product),
-    );
+Future<void> recordSale(List<Map<String, dynamic>> productsToCheckout, String description) async {
+  final response = await http.post(
+    Uri.parse('https://mobile-dev-backend-f97728e716db.herokuapp.com/api/sales'),
+    headers: {'Content-Type': 'application/json'},
+    body: json.encode({
+      'products': productsToCheckout,
+      'date': DateTime.now().toIso8601String(),
+      'description': description,
+    }),
+  );
 
-    if (response.statusCode != 200) {
-      throw Exception('Failed to record sale for product ${product['productId']}');
-    }
+  if (response.statusCode != 200) {
+    throw Exception('Failed to record sale');
   }
 }
 

@@ -54,16 +54,16 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Text(
                       product['name'],
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       'Stock: ${product['stock']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black54,
                         fontSize: 14,
                       ),
@@ -79,13 +79,13 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Text(
                     '\$${product['price']}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black87,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       _buildQuantityButton(
@@ -94,15 +94,15 @@ class ProductCard extends StatelessWidget {
                             ? null
                             : () => onUpdateQuantity(product, -1),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         '${product['quantity'] ?? 0}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       _buildQuantityButton(
                         icon: Icons.add,
                         onPressed: isOutOfStock
@@ -125,8 +125,8 @@ class ProductCard extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        shape: CircleBorder(),
-        padding: EdgeInsets.all(8),
+        shape: const CircleBorder(),
+        padding: const EdgeInsets.all(8),
         backgroundColor: Colors.blue.shade200, // Button color
       ),
       child: Icon(icon, color: Colors.white),

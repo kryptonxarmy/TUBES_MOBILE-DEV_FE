@@ -35,13 +35,18 @@ class _AdminPageState extends State<AdminPage> {
       var selectedProducts = productsData
           .where((product) =>
               product['quantity'] != null && product['quantity'] > 0)
+          .map((product) =>
+              {'productId': product['id'], 'quantity': product['quantity']})
           .toList();
 
+      String description = 'Sale of multiple products: ';
       for (var product in selectedProducts) {
-        await recordSale([
-          {'productId': product['id'], 'quantity': product['quantity']}
-        ]);
+        description += '${product['name']} (x${product['quantity']}), ';
       }
+      // Remove trailing comma and space
+      description = description.substring(0, description.length - 2);
+
+      await recordSale(selectedProducts, description);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('All products checked out successfully')),
@@ -80,7 +85,7 @@ class _AdminPageState extends State<AdminPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Product Management',
                       style: TextStyle(
                         color: Colors.black87,
@@ -90,7 +95,7 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: Colors.white),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
@@ -101,7 +106,7 @@ class _AdminPageState extends State<AdminPage> {
                   future: products,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.white),
@@ -112,7 +117,7 @@ class _AdminPageState extends State<AdminPage> {
                       return Center(
                         child: Text(
                           'Error: ${snapshot.error}',
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }
@@ -120,7 +125,7 @@ class _AdminPageState extends State<AdminPage> {
                     var productsData = snapshot.data ?? [];
 
                     return ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: productsData.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -162,39 +167,42 @@ class _AdminPageState extends State<AdminPage> {
                       ],
                     ),
                     child: ElevatedButton.icon(
-        onPressed: () async {
-          var productsData = await products;
-          var hasSelectedProducts = productsData.any((product) =>
-              product['quantity'] != null && product['quantity'] > 0);
-          if (hasSelectedProducts) {
-            checkoutAllProducts();
-          }
-        },
-        icon: Icon(Icons.shopping_cart_checkout, color: Colors.white, size: 28),
-        label: Text(
-          'Checkout All',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+                      onPressed: () async {
+                        var productsData = await products;
+                        var hasSelectedProducts = productsData.any((product) =>
+                            product['quantity'] != null &&
+                            product['quantity'] > 0);
+                        if (hasSelectedProducts) {
+                          checkoutAllProducts();
+                        }
+                      },
+                      icon: const Icon(Icons.shopping_cart_checkout,
+                          color: Colors.white, size: 28),
+                      label: const Text(
+                        'Checkout All',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade200, // Button color
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue.shade200, // Button color
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 5,
         ),
       ),
-    ),
-  ),
-),
-],
-),
-),
-),
-);
-}
+    );
+  }
 }
