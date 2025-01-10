@@ -30,36 +30,38 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<void> checkoutAllProducts() async {
-    try {
-      var productsData = await products;
-      var selectedProducts = productsData
-          .where((product) =>
-              product['quantity'] != null && product['quantity'] > 0)
-          .map((product) =>
-              {'productId': product['id'], 'quantity': product['quantity']})
-          .toList();
+  try {
+    var productsData = await products;
+    var selectedProducts = productsData
+        .where((product) => product['quantity'] != null && product['quantity'] > 0)
+        .map((product) => {
+              'productId': product['id'],
+              'quantity': product['quantity'],
+              'name': product['name'] // Include product name
+            })
+        .toList();
 
-      String description = 'Sale of multiple products: ';
-      for (var product in selectedProducts) {
-        description += '${product['name']} (x${product['quantity']}), ';
-      }
-      // Remove trailing comma and space
-      description = description.substring(0, description.length - 2);
-
-      await recordSale(selectedProducts, description);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('All products checked out successfully')),
-      );
-      setState(() {
-        products = fetchProducts(); // Refresh the product list
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+    String description = 'Sale of multiple products: ';
+    for (var product in selectedProducts) {
+      description += '${product['name']} (x${product['quantity']}), ';
     }
+    // Remove trailing comma and space
+    description = description.substring(0, description.length - 2);
+
+    await recordSale(selectedProducts, description);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('All products checked out successfully')),
+    );
+    setState(() {
+      products = fetchProducts(); // Refresh the product list
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.toString()}')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

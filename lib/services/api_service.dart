@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final String baseUrl = dotenv.env['API_BASE_URL']!;
 
 Future<List<dynamic>> fetchProducts() async {
-  final response = await http.get(Uri.parse(
-      'https://mobile-dev-backend-f97728e716db.herokuapp.com/api/products'));
+  final response = await http.get(Uri.parse('$baseUrl/products'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
@@ -14,8 +16,7 @@ Future<List<dynamic>> fetchProducts() async {
 
 Future<void> addProduct(String name, double price, int stock) async {
   final response = await http.post(
-    Uri.parse(
-        'https://mobile-dev-backend-f97728e716db.herokuapp.com/api/products/add'),
+    Uri.parse('$baseUrl/products/add'),
     headers: {'Content-Type': 'application/json'},
     body: json.encode({'name': name, 'price': price, 'stock': stock}),
   );
@@ -27,7 +28,7 @@ Future<void> addProduct(String name, double price, int stock) async {
 
 Future<void> reduceStock(String productId, int newStock) async {
   final response = await http.patch(
-    Uri.parse('https://mobile-dev-backend-f97728e716db.herokuapp.com/api/products/$productId'),
+    Uri.parse('$baseUrl/api/products/$productId'),
     headers: {'Content-Type': 'application/json'},
     body: json.encode({'stock': newStock}),
   );
@@ -37,9 +38,10 @@ Future<void> reduceStock(String productId, int newStock) async {
   }
 }
 
-Future<void> recordSale(List<Map<String, dynamic>> productsToCheckout, String description) async {
+Future<void> recordSale(
+    List<Map<String, dynamic>> productsToCheckout, String description) async {
   final response = await http.post(
-    Uri.parse('https://mobile-dev-backend-f97728e716db.herokuapp.com/api/sales'),
+    Uri.parse('$baseUrl/sales'),
     headers: {'Content-Type': 'application/json'},
     body: json.encode({
       'products': productsToCheckout,
@@ -54,8 +56,7 @@ Future<void> recordSale(List<Map<String, dynamic>> productsToCheckout, String de
 }
 
 Future<List<dynamic>> fetchFinancialRecords() async {
-  final response = await http.get(Uri.parse(
-      'https://mobile-dev-backend-f97728e716db.herokuapp.com/api/financial-records'));
+  final response = await http.get(Uri.parse('$baseUrl/financial-records'));
 
   if (response.statusCode == 200) {
     return json.decode(response.body);
@@ -65,8 +66,8 @@ Future<List<dynamic>> fetchFinancialRecords() async {
 }
 
 Future<double> fetchTotalIncome() async {
-  final response = await http.get(Uri.parse(
-      'https://mobile-dev-backend-f97728e716db.herokuapp.com/api/financial-records/total-income'));
+  final response =
+      await http.get(Uri.parse('$baseUrl/financial-records/total-income'));
 
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
