@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/welcome_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'pages/splash_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const WelcomePage(),
+      home: const SplashScreen(),
     );
   }
 }

@@ -76,3 +76,21 @@ Future<double> fetchTotalIncome() async {
     throw Exception('Failed to load total income');
   }
 }
+
+// izin numpang kode api kak
+Future<Map<String, String>> fetchRandomQuote() async {
+  final response = await http.get(
+    Uri.parse('https://api.api-ninjas.com/v1/quotes'),
+    headers: {'X-Api-Key': 'xQwTQVVKPrKIbrHRsu4ynw==viZG6wzkk4UnN0uv'},
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> data = json.decode(response.body);
+    return {
+      'quote': data[0]['quote'],
+      'author': data[0]['author'],
+    };
+  } else {
+    throw Exception('Failed to load quote');
+  }
+}
