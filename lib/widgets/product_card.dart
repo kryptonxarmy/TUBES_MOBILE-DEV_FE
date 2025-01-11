@@ -17,10 +17,10 @@ class ProductCard extends StatelessWidget {
 
     return GlassmorphicContainer(
       width: double.infinity,
-      height: 150,
+      height: 130,
       borderRadius: 20,
       blur: 15,
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.center,
       border: 2,
       linearGradient: LinearGradient(
         begin: Alignment.topLeft,
@@ -39,24 +39,9 @@ class ProductCard extends StatelessWidget {
       child: Opacity(
         opacity: isOutOfStock ? 0.4 : 1.0,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(16.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Gambar Produk (Dummy Placeholder)
-              Container(
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade200,
-                  image: const DecorationImage(
-                    image: const AssetImage('assets/default.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
               // Detail Produk
               Expanded(
                 child: Column(
@@ -68,15 +53,15 @@ class ProductCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     Text(
                       'Stock: ${product['stock']} pcs',
                       style: TextStyle(
                         color: isOutOfStock ? Colors.redAccent : Colors.black54,
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
