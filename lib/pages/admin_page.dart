@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:glassmorphism/glassmorphism.dart';
+import 'package:lottie/lottie.dart';
 import '/services/api_service.dart';
 import '/widgets/product_card.dart';
 
@@ -29,180 +29,118 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  Future<void> checkoutAllProducts() async {
-  try {
-    var productsData = await products;
-    var selectedProducts = productsData
-        .where((product) => product['quantity'] != null && product['quantity'] > 0)
-        .map((product) => {
-              'productId': product['id'],
-              'quantity': product['quantity'],
-              'name': product['name'] // Include product name
-            })
-        .toList();
-
-    String description = 'Sale of multiple products: ';
-    for (var product in selectedProducts) {
-      description += '${product['name']} (x${product['quantity']}), ';
-    }
-    // Remove trailing comma and space
-    description = description.substring(0, description.length - 2);
-
-    await recordSale(selectedProducts, description);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('All products checked out successfully')),
-    );
-    setState(() {
-      products = fetchProducts(); // Refresh the product list
-    });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: ${e.toString()}')),
-    );
-  }
-}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.deepPurple.shade800.withOpacity(0.1),
-              Colors.blue.shade200.withOpacity(0.1),
-              Colors.pink.shade100.withOpacity(0.1),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Product Management',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
+      backgroundColor: const Color(0xFFF3F4F6),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
                 ),
               ),
-              Expanded(
-                child: FutureBuilder<List<dynamic>>(
-                  future: products,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          'Error: ${snapshot.error}',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      );
-                    }
-
-                    var productsData = snapshot.data ?? [];
-
-                    return ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: productsData.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: ProductCard(
-                            product: productsData[index],
-                            onUpdateQuantity: updateQuantity,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
-                  child: GlassmorphicContainer(
-                    width: 280,
-                    height: 70,
-                    borderRadius: 20,
-                    blur: 20,
-                    alignment: Alignment.center,
-                    border: 2,
-                    linearGradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.green.withOpacity(0.1),
-                        Colors.green.withOpacity(0.05),
-                      ],
-                    ),
-                    borderGradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(0.5),
-                        Colors.white.withOpacity(0.2),
-                      ],
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        var productsData = await products;
-                        var hasSelectedProducts = productsData.any((product) =>
-                            product['quantity'] != null &&
-                            product['quantity'] > 0);
-                        if (hasSelectedProducts) {
-                          checkoutAllProducts();
-                        }
-                      },
-                      icon: const Icon(Icons.shopping_cart_checkout,
-                          color: Colors.white, size: 28),
-                      label: const Text(
-                        'Checkout All',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade200, // Button color
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 5,
-                      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Product Management',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
-                ),
+                  IconButton(
+                    icon: const Icon(Icons.logout, color: Colors.redAccent),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: FutureBuilder<List<dynamic>>(
+                future: products,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Animasi Loading Lottie dari URL
+                    return Center(
+                      child: Lottie.network(
+                        'https://assets4.lottiefiles.com/packages/lf20_j1adxtyb.json',
+                        width: 150,
+                        height: 150,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.network(
+                            'https://assets7.lottiefiles.com/private_files/lf30_t26law.json',
+                            width: 200,
+                          ),
+                          Text(
+                            'Oops! ${snapshot.error}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  var productsData = snapshot.data ?? [];
+
+                  if (productsData.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.network(
+                            'https://assets4.lottiefiles.com/packages/lf20_d0bYW3.json',
+                            width: 200,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'No products available.',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: productsData.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: ProductCard(
+                          product: productsData[index],
+                          onUpdateQuantity: updateQuantity,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
