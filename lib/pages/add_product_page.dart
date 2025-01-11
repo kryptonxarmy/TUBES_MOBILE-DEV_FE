@@ -23,7 +23,7 @@ class _AddProductPageState extends State<AddProductPage> {
           double.parse(priceController.text),
           int.parse(stockController.text),
         );
-        
+
         // Clear form after successful submission
         nameController.clear();
         priceController.clear();
@@ -31,15 +31,15 @@ class _AddProductPageState extends State<AddProductPage> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Product added successfully'),
-            backgroundColor: Colors.green.withOpacity(0.7),
+            content: const Text('Product added successfully! 🎉'),
+            backgroundColor: Colors.greenAccent.shade200,
           ),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error adding product: ${e.toString()}'),
-            backgroundColor: Colors.red.withOpacity(0.7),
+            backgroundColor: Colors.redAccent.shade200,
           ),
         );
       }
@@ -50,14 +50,13 @@ class _AddProductPageState extends State<AddProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.deepPurple.shade800,
-              Colors.deepPurple.shade600,
-              Colors.deepPurple.shade400,
+              Color(0xFF0D47A1),
+              Color(0xFF4CAF50),
             ],
           ),
         ),
@@ -76,7 +75,13 @@ class _AddProductPageState extends State<AddProductPage> {
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(1, 2),
+                            blurRadius: 3.0,
+                            color: Colors.black26,
+                          ),
+                        ],
                       ),
                     ),
                     IconButton(
@@ -86,16 +91,14 @@ class _AddProductPageState extends State<AddProductPage> {
                   ],
                 ),
               ),
-              
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: GlassmorphicContainer(
                     width: double.infinity,
-                    height: double.infinity,
+                    height: 500, // Add the required height parameter
                     borderRadius: 20,
                     blur: 20,
-                    alignment: Alignment.center,
                     border: 2,
                     linearGradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -105,17 +108,12 @@ class _AddProductPageState extends State<AddProductPage> {
                         Colors.white.withOpacity(0.05),
                       ],
                     ),
-                    borderGradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(0.5),
-                        Colors.white.withOpacity(0.2),
-                      ],
+                    borderGradient: const LinearGradient(
+                      colors: [Colors.white70, Colors.white10],
                     ),
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(24.0),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -131,7 +129,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 20),
                               _buildGlassTextFormField(
                                 controller: priceController,
                                 labelText: 'Product Price',
@@ -144,7 +142,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 20),
                               _buildGlassTextFormField(
                                 controller: stockController,
                                 labelText: 'Product Stock',
@@ -157,7 +155,7 @@ class _AddProductPageState extends State<AddProductPage> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 32),
                               _buildSubmitButton(),
                             ],
                           ),
@@ -183,10 +181,10 @@ class _AddProductPageState extends State<AddProductPage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withOpacity(0.15),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withOpacity(0.4),
           width: 1,
         ),
       ),
@@ -197,8 +195,8 @@ class _AddProductPageState extends State<AddProductPage> {
           labelStyle: const TextStyle(color: Colors.white70),
           prefixIcon: Icon(icon, color: Colors.white70),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          errorStyle: TextStyle(color: Colors.red.shade200),
+          contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          errorStyle: TextStyle(color: Colors.red.shade300),
         ),
         style: const TextStyle(color: Colors.white),
         keyboardType: keyboardType,
@@ -214,42 +212,32 @@ class _AddProductPageState extends State<AddProductPage> {
       child: GlassmorphicContainer(
         width: double.infinity,
         height: 60,
-        borderRadius: 20,
+        borderRadius: 25,
         blur: 20,
         alignment: Alignment.center,
         border: 2,
-        linearGradient: LinearGradient(
+        linearGradient: const LinearGradient(
+          colors: [Colors.greenAccent, Colors.teal],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.green.withOpacity(0.2),
-            Colors.green.withOpacity(0.1),
-          ],
         ),
-        borderGradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(0.2),
-          ],
+        borderGradient: const LinearGradient(
+          colors: [Colors.white70, Colors.white10],
         ),
-        child: const Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.add_circle_outline, color: Colors.white),
-              SizedBox(width: 10),
-              Text(
-                'Add Product',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.add_circle_outline, color: Colors.white, size: 24),
+            SizedBox(width: 12),
+            Text(
+              'Add Product',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

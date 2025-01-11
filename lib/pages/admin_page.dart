@@ -30,52 +30,47 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<void> checkoutAllProducts() async {
-  try {
-    var productsData = await products;
-    var selectedProducts = productsData
-        .where((product) => product['quantity'] != null && product['quantity'] > 0)
-        .map((product) => {
-              'productId': product['id'],
-              'quantity': product['quantity'],
-              'name': product['name'] // Include product name
-            })
-        .toList();
+    try {
+      var productsData = await products;
+      var selectedProducts = productsData
+          .where((product) => product['quantity'] != null && product['quantity'] > 0)
+          .map((product) => {
+                'productId': product['id'],
+                'quantity': product['quantity'],
+                'name': product['name']
+              })
+          .toList();
 
-    String description = 'Sale of multiple products: ';
-    for (var product in selectedProducts) {
-      description += '${product['name']} (x${product['quantity']}), ';
+      String description = 'Sale of multiple products: ';
+      for (var product in selectedProducts) {
+        description += '${product['name']} (x${product['quantity']}), ';
+      }
+      description = description.substring(0, description.length - 2);
+
+      await recordSale(selectedProducts, description);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All products checked out successfully')),
+      );
+      setState(() {
+        products = fetchProducts();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
     }
-    // Remove trailing comma and space
-    description = description.substring(0, description.length - 2);
-
-    await recordSale(selectedProducts, description);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('All products checked out successfully')),
-    );
-    setState(() {
-      products = fetchProducts(); // Refresh the product list
-    });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: ${e.toString()}')),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.deepPurple.shade800.withOpacity(0.1),
-              Colors.blue.shade200.withOpacity(0.1),
-              Colors.pink.shade100.withOpacity(0.1),
-            ],
+            colors: [Color(0xFF0D47A1), Color(0xFF4CAF50)],
           ),
         ),
         child: SafeArea(
@@ -90,10 +85,17 @@ class _AdminPageState extends State<AdminPage> {
                     const Text(
                       'Product Management',
                       style: TextStyle(
-                        color: Colors.black87,
+                        color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(2, 2),
+                            blurRadius: 4.0,
+                            color: Colors.black38,
+                          ),
+                        ],
                       ),
                     ),
                     IconButton(
@@ -110,8 +112,9 @@ class _AdminPageState extends State<AdminPage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                         ),
                       );
                     }
@@ -143,60 +146,63 @@ class _AdminPageState extends State<AdminPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Center(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: GestureDetector(
+                  onTap: () async {
+                    var productsData = await products;
+                    var hasSelectedProducts = productsData.any((product) =>
+                        product['quantity'] != null &&
+                        product['quantity'] > 0);
+                    if (hasSelectedProducts) {
+                      checkoutAllProducts();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No products selected for checkout!'),
+                        ),
+                      );
+                    }
+                  },
                   child: GlassmorphicContainer(
-                    width: 280,
+                    width: double.infinity,
                     height: 70,
-                    borderRadius: 20,
+                    borderRadius: 12,
                     blur: 20,
-                    alignment: Alignment.center,
-                    border: 2,
+                    border: 1,
                     linearGradient: LinearGradient(
+                      colors: [
+                        Colors.greenAccent.withOpacity(0.2),
+                        Colors.blueAccent.withOpacity(0.1),
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Colors.green.withOpacity(0.1),
-                        Colors.green.withOpacity(0.05),
-                      ],
                     ),
                     borderGradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
                       colors: [
                         Colors.white.withOpacity(0.5),
                         Colors.white.withOpacity(0.2),
                       ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        var productsData = await products;
-                        var hasSelectedProducts = productsData.any((product) =>
-                            product['quantity'] != null &&
-                            product['quantity'] > 0);
-                        if (hasSelectedProducts) {
-                          checkoutAllProducts();
-                        }
-                      },
-                      icon: const Icon(Icons.shopping_cart_checkout,
-                          color: Colors.white, size: 28),
-                      label: const Text(
-                        'Checkout All',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.shopping_cart_checkout,
                           color: Colors.white,
+                          size: 28,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade200, // Button color
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        SizedBox(width: 16),
+                        Text(
+                          'Checkout All',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         ),
-                        elevation: 5,
-                      ),
+                      ],
                     ),
                   ),
                 ),
